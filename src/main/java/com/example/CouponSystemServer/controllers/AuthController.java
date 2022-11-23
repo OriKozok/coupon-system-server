@@ -42,13 +42,6 @@ public class AuthController {
     public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password){
         try {
             ClientFacade facade = loginManager.login(email, password);
-            if(!(facade instanceof AdminFacade)){
-                int id=0;
-                if(facade instanceof CustomerFacade)
-                    id = ((CustomerFacade) facade).getCustomerID();
-                else if(facade instanceof CompanyFacade)
-                    id = ((CompanyFacade) facade).getCompanyID();
-            }
             String token = createToken(facade);
             sessions.put(token, new OurSession(facade, System.currentTimeMillis()));
             return ResponseEntity.ok(token);
